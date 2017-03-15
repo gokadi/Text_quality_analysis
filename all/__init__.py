@@ -1,4 +1,4 @@
-from all import inp_dict as dc
+'''from all import inp_dict as dc
 from all import criteria as cr
 
 orf_err,total_words,tonal,stop_word,tonal_words,total_errs=dc.make_dict()
@@ -21,3 +21,4 @@ print("Водность текста: ",vodnost)
 print("Грамматические ошибки: ",grammatic)
 print("Орфографические ошибки: ",orph)
 print("Тональность: ",ton)
+'''
