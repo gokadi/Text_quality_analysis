@@ -1,22 +1,18 @@
 import os
 import re
 import pymorphy2
-import enchant
-from language_check import LanguageTool
 from collections import OrderedDict
 
 
 class PrepText:
 
     def __init__(self, work_file):
+        self.__txt = ""
         self.__total_words = 0
         self.__work_file = ""
         self.__file = ""
-        self.__tool = LanguageTool("ru-RU")
-        self.__ch = enchant.Dict("ru_RU")
         self.__morph = pymorphy2.MorphAnalyzer()
         self.__lsWord = {}
-        self.__txt = ""
         self.__work_file = work_file
         self.__dict_file = open(self.__work_file + '_dict.csv', 'w')
         self.__read_file()
@@ -80,3 +76,9 @@ class PrepText:
 
     def get_lsWord(self):
         return self.__lsWord
+
+    def get_txt(self):
+        return self.__txt
+
+    def get_totalword(self):
+        return self.__total_words
