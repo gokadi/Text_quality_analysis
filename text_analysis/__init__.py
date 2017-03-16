@@ -11,7 +11,9 @@ if __name__ == "__main__":
     water = Water(obj)
     orth = Orthography(obj)
     info = Informativity(obj)
-    print(water.get_mark())
-    print(gramm.get_mark())
-    print(orth.get_mark())
-    print(info.get_mark())
+    # print(water.get_mark())
+    # print(gramm.get_mark())
+    # print(orth.get_mark())
+    # print(info.get_mark())
+    total_mark = (water.get_mark() + gramm.get_mark() + orth.get_mark() + info.get_mark())/4
+    print("Общая оценка качества текста: ", total_mark)

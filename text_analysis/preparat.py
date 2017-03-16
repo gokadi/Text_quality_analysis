@@ -61,9 +61,9 @@ class PrepText:
             for key in self.__lsWord:
                 s = str("{0};{1}\r").format(key, self.__lsWord[key])
                 self.__dict_file.write(s)
-            print('Результат записан: ' + self.__work_file + '_dict.csv')
+            print('Частотный словарь записан: ' + self.__work_file + '_dict.csv')
         except:
-            print('Ошибка записи частноного словаря в файл.')
+            print('Ошибка записи частотного словаря в файл.')
         finally:
             self.__dict_file.close()
 

@@ -17,6 +17,10 @@ class Water:
             if tmp1.tag.POS == "INTJ" or tmp1.tag.POS == "PRCL" or tmp1.tag.POS == "CONJ" or tmp1.tag.POS == "PRED":
                 self.__stop_word += 1
         self.__value = self.__stop_word / obj.get_totalword()
+        if self.__value >= 0.5:
+            self.__value = 1.0
+        else:
+            self.__value *= 2
 
     def get_mark(self):
-        return self.__value
+        return 1 - self.__value
