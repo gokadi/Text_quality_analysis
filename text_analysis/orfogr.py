@@ -1,0 +1,25 @@
+import enchant
+import pymorphy2
+
+
+class Orthography:
+
+    def __init__(self, obj):
+        self.__orf_err = 0
+        self.__value = 0.0
+        self.__stop_word = 0
+        self.__obj = obj
+        self.__vocab = obj.get_lsWord()
+        self.__wateri(obj)
+
+    def __wateri(self, obj):
+        morph = pymorphy2.MorphAnalyzer()
+        c = enchant.Dict("ru_RU")
+        for key in self.__vocab:
+            tmp1 = morph.parse(key)[0]
+            if c.check(tmp1.normal_form) == False and key != "!" and key != "?":
+                self.__orf_err += 1
+        self.__value = self.__orf_err/ obj.get_totalword()
+
+    def get_mark(self):
+        return self.__value

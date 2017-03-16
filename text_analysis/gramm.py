@@ -4,6 +4,7 @@ from language_check import LanguageTool
 class GrammMark:
 
     def __init__(self, obj):
+        self.__value = 0.0
         self.__obj = obj
         self.__txt = obj.get_txt()
         self.__commas(obj)
