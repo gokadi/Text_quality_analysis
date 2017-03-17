@@ -3,6 +3,7 @@ from text_analysis.gramm import GrammMark
 from text_analysis.wateriness import Water
 from text_analysis.orfogr import Orthography
 from text_analysis.inform import Informativity
+from text_analysis.tonalcy import Tonal
 
 if __name__ == "__main__":
     obj = PrepText("D://text")
@@ -11,6 +12,7 @@ if __name__ == "__main__":
     water = Water(obj)
     orth = Orthography(obj)
     info = Informativity(obj)
+    ton = Tonal(obj)
     # print(water.get_mark())
     # print(gramm.get_mark())
     # print(orth.get_mark())
