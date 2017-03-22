@@ -1,5 +1,6 @@
 import pymorphy2
-
+from nltk.corpus import stopwords
+import nltk
 
 class Water:
 
@@ -14,7 +15,7 @@ class Water:
         morph = pymorphy2.MorphAnalyzer()
         for key in self.__vocab:
             tmp1 = morph.parse(key)[0]
-            if tmp1.tag.POS == "INTJ" or tmp1.tag.POS == "PRCL" or tmp1.tag.POS == "CONJ" or tmp1.tag.POS == "PRED":
+            if tmp1.normal_form in stopwords.words("russian"): #.tag.POS == "INTJ" or tmp1.tag.POS == "PRCL" or tmp1.tag.POS == "CONJ" or tmp1.tag.POS == "PRED":
                 self.__stop_word += 1
         self.__value = self.__stop_word / obj.get_totalword()
         if self.__value >= 0.5:

@@ -13,7 +13,7 @@ if __name__ == "__main__":
     orth = Orthography(obj)
     info = Informativity(obj)
     ton = Tonal(obj)
-    # print(water.get_mark())
+    print(water.get_mark())
     # print(gramm.get_mark())
     # print(orth.get_mark())
     # print(info.get_mark())

@@ -15,11 +15,11 @@ class Tonal:
         cr = {}
         for key in self.__vocab:
             tmp1 = morph.parse(key)[0]
-            if not (tmp1.tag.POS == "INTJ" or tmp1.tag.POS == "PRCL" or tmp1.tag.POS == "CONJ" or tmp1.tag.POS == "PRED"
-                    or key == "?" or key == "!" or tmp1.tag.POS == "PREP" or tmp1.tag.POS == "NUMR" or tmp1.tag.POS == "NPRO"):
+            if not (tmp1.tag.POS == "INTJ" or tmp1.tag.POS == "PRCL" or tmp1.tag.POS == "CONJ"
+                    or tmp1.tag.POS == "PRED" or key == "?" or key == "!" or tmp1.tag.POS == "PREP"
+                    or tmp1.tag.POS == "NUMR" or tmp1.tag.POS == "NPRO"):
                 cr[tmp1] = self.__vocab[key]
         self.__vocab = OrderedDict(sorted(cr.items()))
-
 
     def get_mark(self):
         return 1 - self.__value
