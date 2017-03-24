@@ -19,85 +19,61 @@ unlabeled_train = pd.read_csv( "D:/учеба_магистратура/6курс
 # в модели просто вектора для всех слов из всех обзоров.
 # здесь для каждого обзора составляем усредненный вектор
 def makeFeatureVec(words, model, num_features):
-    # Function to average all of the word vectors in a given
-    # paragraph
-    #
-    # Pre-initialize an empty numpy array (for speed)
+    # Усредняем вектора для всех слов в обзоре
+    # Инициализируем массив
     featureVec = np.zeros((num_features,),dtype="float32")
-    #
     nwords = 0.
-    #
-    # Index2word is a list that contains the names of the words in
-    # the model's vocabulary. Convert it to a set, for speed
+    # Index2word - список, содержащий слова из словаря модели. Конвертируем в set
     index2word_set = set(model.wv.index2word)
-    #
-    # Loop over each word in the review and, if it is in the model's
-    # vocaublary, add its feature vector to the total
+    # Для всех слова в обзоре, если они в словаре, суммируем вектора
     for word in words:
         if word in index2word_set:
             nwords = nwords + 1.
             featureVec = np.add(featureVec,model[word])
-    #
-    # Divide the result by the number of words to get the average
+    # Усредняем получившийся вектор
     featureVec = np.divide(featureVec,nwords)
     return featureVec
 
-
 def getAvgFeatureVecs(reviews, model, num_features):
-    # Given a set of reviews (each one a list of words), calculate
-    # the average feature vector for each one and return a 2D numpy array
-    #
-    # Initialize a counter
+    # Вычисляем усредненные вектора для набора обзоров
+    # Инициализируем счетчик
     counter = int(0)
-    #
-    # Preallocate a 2D numpy array, for speed
+    # Инициализация массива усредненных векторов
     reviewFeatureVecs = np.zeros((len(reviews),num_features),dtype="float32")
-    #
-    # Loop through the reviews
+    # Цикл по всем обзорам
     for review in reviews:
-       #
-       # Print a status message every 1000th review
+       # Статус вычислений
        if counter%1000. == 0.:
            print("Review %i of %d" % (counter, len(reviews)))
-       #
-       # Call the function (defined above) that makes average feature vectors
+       # Для каждого обзора вычисляем его усредненный вектор
        reviewFeatureVecs[counter] = makeFeatureVec(review, model,
            num_features)
-       #
-       # Increment the counter
+       # Счетчик ++
        counter = counter + 1
+    # Возвращаем массив усредненных векторов
     return reviewFeatureVecs
 
-num_features = int(300)   # Word vector dimensionality
+num_features = int(300)   # Размерность вектора слов
 
 def review_to_wordlist( review, remove_stopwords=False ):
-    # Function to convert a document to a sequence of words,
-    # optionally removing stop words.  Returns a list of words.
-    #
-    # 1. Remove HTML
-
-    #review = re.sub(r'^https?:\/\/.*[\r\n]*', '', review, flags=re.MULTILINE)
+    # Делим преложение на список слов (list of words)
+    # 1. Очистка от html тегов и URLов
+    review = re.sub(r'^https?:\/\/.*[\r\n]*', '', review, flags=re.MULTILINE)
     review_text = BeautifulSoup(review, "html.parser").get_text()
-    #
-    # 2. Remove non-letters and URLs
-    review_text = re.sub("[^a-zA-Z]"," ", review_text)
-    #
-    # 3. Convert words to lower case and split them
+    # 2. Оставить только буквы
+    review_text = re.sub("[^a-zA-Z]", " ", review_text)
+    # 3. Привести текст к нижнему регистру и разделить на слова
     words = review_text.lower().split()
-    #
-    # 4. Optionally remove stop words (false by default)
+    # 4. Удалить стоп слова (по флагу)
     if remove_stopwords:
         stops = set(stopwords.words("english"))
         words = [w for w in words if not w in stops]
-    #
-    # 5. Return a list of words
-    return(words)
+    # 5. Вернуть список слов
+    return (words)
 
 
 # ****************************************************************
-# Calculate average feature vectors for training and testing sets,
-# using the functions we defined above. Notice that we now use stop word
-# removal.
+# Вызов функций для набора данных
 
 print("Creating average feature vecs for train reviews")
 clean_train_reviews = []
@@ -115,7 +91,7 @@ for review in test["review"]:
 
 testDataVecs = getAvgFeatureVecs( clean_test_reviews, model, num_features )
 
-forest = RandomForestClassifier( n_estimators = 100 )
+forest = RandomForestClassifier( n_estimators = 100 ) # Число деревьев
 
 print("Fitting a random forest to labeled training data...")
 forest = forest.fit( trainDataVecs, train["sentiment"] )
