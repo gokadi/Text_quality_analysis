@@ -54,13 +54,16 @@ class Word2VecTrain:
         return sentences
 
     @staticmethod
-    def review_to_wordlist(review, remove_stopwords=False):
+    def review_to_wordlist(review, remove_stopwords=False, language="EN"):
         # Делим преложение на список слов (list of words)
         # 1. Очистка от html тегов и URLов
         review = re.sub(r'^https?:\/\/.*[\r\n]*', '', review, flags=re.MULTILINE)
         review_text = BeautifulSoup(review, "html.parser").get_text()
         # 2. Оставить только буквы
-        review_text = re.sub("[^a-zA-Z]", " ", review_text)
+        if language == "EN":
+            review_text = re.sub("[^a-zA-Z]", " ", review_text)
+        elif language == "RU":
+            review_text = re.sub("[^а-яА-Я]", " ", review_text)
         # 3. Привести текст к нижнему регистру и разделить на слова
         words = review_text.lower().split()
         # 4. Удалить стоп слова (по флагу)

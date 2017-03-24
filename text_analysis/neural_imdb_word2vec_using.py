@@ -9,41 +9,45 @@ class Word2VecUsage:
     __num_features = int(300)  # Размерность вектора слов
 
     def __init__(self):
-        train = Word2VecTrain.train
-        test = Word2VecTrain.test
+        self.train = Word2VecTrain.train
+        self.test = Word2VecTrain.test
         self.__model = Word2Vec.load("300features_40minwords_10context")
+        self.__forest_train()
 
-        # ****************************************************************
-        # Вызов функций для набора данных
+    def pred(self, txt, language):
+        return self.__forest.predict(
+            self.__makeFeatureVec(Word2VecTrain.review_to_wordlist(txt, language=language), self.__model, self.__num_features))
 
-        print("Creating average feature vecs for train reviews")
-        clean_train_reviews = []
-        for review in train["review"]:
-            clean_train_reviews.append(Word2VecTrain.review_to_wordlist(review,
-                                                                        remove_stopwords=True))
-
-        trainDataVecs = self.__getAvgFeatureVecs(clean_train_reviews, self.__model, self.__num_features)
-
-        print("Creating average feature vecs for test reviews")
-        clean_test_reviews = []
-        for review in test["review"]:
-            clean_test_reviews.append(Word2VecTrain.review_to_wordlist(review,
-                                                                       remove_stopwords=True))
-
-        testDataVecs = self.__getAvgFeatureVecs(clean_test_reviews, self.__model, self.__num_features)
-
-        forest = RandomForestClassifier(n_estimators=100)  # Число деревьев
-
-        print("Fitting a random forest to labeled training data...")
-        forest = forest.fit(trainDataVecs, train["sentiment"])
-
+    def __forest_test(self):
         # Test & extract results
-        result = forest.predict(testDataVecs)
-
+        result = self.__forest.predict(self.__test_reviews())
         # Write the test results
-        output = pd.DataFrame(data={"id": test["id"], "sentiment": result})
+        output = pd.DataFrame(data={"id": self.test["id"], "sentiment": result})
         output.to_csv("D:/учеба_магистратура/6курс/Александров/нейросеть/Word2Vec_AverageVectors.tsv", index=False,
                       sep="\t", quoting=3)
+
+    def __forest_train(self):
+        self.__forest = RandomForestClassifier(n_estimators=100)  # Число деревьев
+        print("Fitting a random forest to labeled training data...")
+        self.__forest = self.__forest.fit(self.__train_reviews(), self.train["sentiment"])
+
+    def __test_reviews(self):
+        print("Creating average feature vecs for test reviews")
+        clean_test_reviews = []
+        for review in self.test["review"]:
+            clean_test_reviews.append(Word2VecTrain.review_to_wordlist(review,
+                                                                       remove_stopwords=True))
+        # self.testDataVecs = self.__getAvgFeatureVecs(clean_test_reviews, self.__model, self.__num_features)
+        return self.__getAvgFeatureVecs(clean_test_reviews, self.__model, self.__num_features)
+
+    def __train_reviews(self):
+        print("Creating average feature vecs for train reviews")
+        clean_train_reviews = []
+        for review in self.train["review"]:
+            clean_train_reviews.append(Word2VecTrain.review_to_wordlist(review,
+                                                                        remove_stopwords=True))
+        # self.trainDataVecs = self.__getAvgFeatureVecs(clean_train_reviews, self.__model, self.__num_features)
+        return self.__getAvgFeatureVecs(clean_train_reviews, self.__model, self.__num_features)
 
     # в модели просто вектора для всех слов из всех обзоров.
     # здесь для каждого обзора составляем усредненный вектор
@@ -76,11 +80,8 @@ class Word2VecUsage:
                 print("Review %i of %d" % (counter, len(reviews)))
             # Для каждого обзора вычисляем его усредненный вектор
             reviewFeatureVecs[counter] = self.__makeFeatureVec(review, model,
-                                                        num_features)
+                                                               num_features)
             # Счетчик ++
             counter = counter + 1
         # Возвращаем массив усредненных векторов
         return reviewFeatureVecs
-
-
-

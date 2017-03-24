@@ -2,11 +2,11 @@ import os
 import re
 import pymorphy2
 from collections import OrderedDict
-
+from text_analysis.neural_imdb_word2vec_training import Word2VecTrain
 
 class PrepText:
 
-    def __init__(self, work_file):
+    def __init__(self, work_file, language="EN"):
         self.__txt = ""
         self.__total_words = 0
         self.__work_file = ""
@@ -17,6 +17,7 @@ class PrepText:
         self.__dict_file = open(self.__work_file + '_dict.csv', 'w')
         self.__read_file()
         self.__make_dict()
+        self.__language = language
 
     def __read_file(self):
         if os.path.isfile(self.__work_file):
@@ -77,6 +78,9 @@ class PrepText:
 
     def get_lsWord(self):
         return self.__lsWord
+
+    def get_words(self):
+        return Word2VecTrain.review_to_wordlist(self.__txt,language=self.__language)
 
     def get_txt(self):
         return self.__txt
