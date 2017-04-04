@@ -6,13 +6,14 @@ from text_analysis.neural_imdb_word2vec_training import Word2VecTrain
 
 
 class Word2VecUsage:
-    __num_features = int(300)  # Размерность вектора слов
+    __num_features = int(200)  # Размерность вектора слов
 
     def __init__(self):
         self.train = Word2VecTrain.train
         self.test = Word2VecTrain.test
-        self.__model = Word2Vec.load("300features_40minwords_10context")
+        self.__model = Word2Vec.load("300features_40minwords_10context_RU")
         self.__forest_train()
+        #self.__forest_test()
 
     def pred(self, txt, language):
         return self.__forest.predict(
@@ -23,7 +24,7 @@ class Word2VecUsage:
         result = self.__forest.predict(self.__test_reviews())
         # Write the test results
         output = pd.DataFrame(data={"id": self.test["id"], "sentiment": result})
-        output.to_csv("D:/учеба_магистратура/6курс/Александров/нейросеть/Word2Vec_AverageVectors.tsv", index=False,
+        output.to_csv("D:/учеба_магистратура/6курс/Александров/нейросеть/Word2Vec_AverageVectors_RU.tsv", index=False,
                       sep="\t", quoting=3)
 
     def __forest_train(self):
