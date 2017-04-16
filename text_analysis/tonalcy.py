@@ -1,5 +1,3 @@
-from collections import OrderedDict
-import pymorphy2
 from text_analysis.neural_imdb_word2vec_using import Word2VecUsage
 
 
@@ -12,5 +10,5 @@ class Tonal:
 
     def get_mark(self):
         o = Word2VecUsage()
-        return o.pred(self.__txt, "RU")
+        return o.pred(self.__txt)
 

@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from text_analysis.neural_imdb_word2vec_training import Word2VecTrain
+from sklearn.externals import joblib
 
 
 class Word2VecUsage:
@@ -13,11 +14,13 @@ class Word2VecUsage:
         self.test = Word2VecTrain.test
         self.__model = Word2Vec.load("300features_40minwords_10context_RU")
         self.__forest_train()
-        #self.__forest_test()
+        joblib.dump(self.__forest,'randomforestTRAINED.pkl')# сохраняем обученный классификатор
+        # self.__forest = joblib.load('randomforestTRAINED.pkl')
+        # self.__forest_test()
 
-    def pred(self, txt, language):
+    def pred(self, txt):
         return self.__forest.predict(
-            self.__makeFeatureVec(Word2VecTrain.review_to_wordlist(txt, language=language), self.__model, self.__num_features))
+            self.__makeFeatureVec(Word2VecTrain.review_to_wordlist(txt), self.__model, self.__num_features))
 
     def __forest_test(self):
         # Test & extract results
