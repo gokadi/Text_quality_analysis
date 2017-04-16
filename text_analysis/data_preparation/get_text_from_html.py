@@ -32,9 +32,18 @@ def make(url):
     print(txt)
     return txt
 
-output = open('C:/Users/Администратор/PycharmProjects/analysis_text/text_analysis/train_texts/ready_txts/texts.txt','w')
-for i in range(len(seo_texts)-1):
-    txt = make(seo_texts[i])
-    for i in range(len(txt)-1):
-        output.write(txt[i]+'\n')
-output.close()
+def make_files():
+    output = open('C:/Users/Администратор/PycharmProjects/analysis_text/text_analysis/train_texts/ready_txts/texts.txt',
+                  'w')
+    output_csv = open(
+        'C:/Users/Администратор/PycharmProjects/analysis_text/text_analysis/train_texts/ready_txts/traindata.tsv', 'w')
+    output_csv.write("id\tsentiment\treview\n")
+    for i in range(len(seo_texts) - 1):
+        txt = make(seo_texts[i])
+        for i in range(len(txt) - 1):
+            output.write(txt[i] + '\n')
+            output_csv.write(str(i + 1) + "\t" + str(1) + "\t" + txt[i] + "\n")
+    output.close()
+    output_csv.close()
+
+
