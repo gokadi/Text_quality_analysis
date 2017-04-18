@@ -1,19 +1,18 @@
 import pandas as pd
 from bs4 import BeautifulSoup
 import re
-import nltk.data
 from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
 import logging
 from gensim.models import word2vec
-TRAIN_PATH = 'D:/учеба_магистратура/6курс/Александров/нейросеть/labeledTrainData_RU.tsv'
-NEURAL_MODEL = "300features_40minwords_10context_RU"
+TRAIN_PATH = 'C:/Users/Администратор/PycharmProjects/analysis_text/text_analysis/train_texts/ready_txts/traindata.tsv'
+TEST_PATH = 'C:/Users/Администратор/PycharmProjects/analysis_text/text_analysis/train_texts/ready_txts/testdata.tsv'
+NEURAL_MODEL = "300features_40minwords_10context_RU_advert"
 
-class Word2VecTrain:
-    train = pd.read_csv('D:/учеба_магистратура/6курс/Александров/нейросеть/labeledTrainData_RU.tsv', header=0, delimiter="\t", quoting=3)
-    test = pd.read_csv("D:/учеба_магистратура/6курс/Александров/нейросеть/testData_RU.tsv", header=0,
-                            delimiter="\t",
-                            quoting=3)
+
+class Word2VecTrain_advert:
+    train = pd.read_csv(TRAIN_PATH, header=0, delimiter="\t", quoting=3)
+    test = pd.read_csv(TEST_PATH, header=0, delimiter="\t", quoting=3)
     unlabeled_train = pd.read_csv("D:/учеба_магистратура/6курс/Александров/нейросеть/unlabeledTrainData_RU.tsv",
                                        header=0, delimiter="\t", quoting=3)
     def __init__(self, features = 200, minword = 40, numworkers = 4, context=10, downsample = 1e-3):
@@ -23,8 +22,6 @@ class Word2VecTrain:
         self.__num_workers = numworkers  # Число параллельных процессов, для ускорения обучения
         self.__context = context  # Как много слов из окружения слова должно учитываться при обучении
         self.__downsampling = downsample  # Исключаем часто встречающиеся в тексте слова
-
-
 
         # Verify the number of reviews that were read (100,000 in total)
         print("Read %d labeled train reviews, %d labeled test reviews, "
